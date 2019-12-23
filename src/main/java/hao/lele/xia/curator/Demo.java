@@ -76,6 +76,16 @@ public class Demo {
         return null;
     }
 
+    public void deleteNode(String path){
+        try {
+            client.delete()
+                    .deletingChildrenIfNeeded()
+                    .forPath(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addListener1(String path){
         try {
             client.getData().usingWatcher(new CuratorWatcher() {
@@ -100,7 +110,6 @@ public class Demo {
     public void addListener(String path){
         List<String> nodes = getNode("/lock").stream().map(s -> "/lock/" + s).collect(Collectors.toList());
         String min = Collections.min(nodes);
-        boolean close = false;
         if(path.equalsIgnoreCase(min)){
             //创建操作,获取锁
             InterProcessMutex lock = getLock("/lock");
@@ -110,7 +119,6 @@ public class Demo {
                     return;
                 }
                 System.out.println(Thread.currentThread().getName());
-                close = true;
             }catch (Exception e){
                 e.printStackTrace();
             }finally {
@@ -118,16 +126,15 @@ public class Demo {
                     if(lock.isOwnedByCurrentThread()){
                         lock.release();
                     }
-                    if(close){
-                        client.close();
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }else{
-            //添加监听
-            NodeCache node = new NodeCache(client,min);
+            //添加监听小自己一号的
+            String less = path.substring(path.lastIndexOf("-")+1);
+            String p1 = path.substring(0,path.lastIndexOf("-")+1) + (Integer.parseInt(less) - 1);
+            NodeCache node = new NodeCache(client,p1);
             try {
                 node.start(true);
                 node.getListenable().addListener(new NodeCacheListener() {
@@ -149,9 +156,12 @@ public class Demo {
     public static void main(String[] args) throws InterruptedException {
         Demo demo = new Demo();
         demo.initClient();
-        Thread.sleep(10000);
         demo.createPersisentNode("/lock");
         String result1 = demo.createEphemeralNode("/lock/mda");
+        String result2 = demo.createEphemeralNode("/lock/mda");
+        Thread.sleep(5000);
+        demo.deleteNode(result2);
         demo.addListener(result1);
+        Thread.sleep(Integer.MAX_VALUE);
     }
 }
