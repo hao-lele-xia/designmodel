@@ -1,5 +1,8 @@
 package hao.lele.xia.tool;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author chenhao
  * @description <p>
@@ -8,4 +11,6 @@ package hao.lele.xia.tool;
  * 导出excel工具包
  */
 public class Hutool {
+
+    private Map<String,String> map = new HashMap<>();
 }
