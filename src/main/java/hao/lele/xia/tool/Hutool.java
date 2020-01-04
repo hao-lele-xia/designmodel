@@ -1,5 +1,14 @@
 package hao.lele.xia.tool;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.util.StreamUtils;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,4 +22,6 @@ import java.util.Map;
 public class Hutool {
 
     private Map<String,String> map = new HashMap<>();
+
+
 }
