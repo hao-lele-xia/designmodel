@@ -83,6 +83,13 @@
             <version>1.19</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.emc.ecs/nfs-client -->
+        <dependency>
+            <groupId>com.emc.ecs</groupId>
+            <artifactId>nfs-client</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
     </dependencies>
 
 </project>
